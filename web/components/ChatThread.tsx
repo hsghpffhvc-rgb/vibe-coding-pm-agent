@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { asset } from '@/lib/asset';
 import { MessageBlocks } from './MessageBlocks';
 import type { Answer, ChatMessage } from '@/lib/types';
 
@@ -36,7 +37,7 @@ export function ChatThread({ messages, busy, onAnswer }: ChatThreadProps) {
             <div key={message.id} className="animate-rise">
               <div className="mb-2 flex items-center gap-2">
                 <img
-                  src="/pm-avatar.png"
+                  src={asset('/pm-avatar.png')}
                   alt="产品专家头像"
                   className="h-6 w-6 shrink-0 rounded-full object-cover ring-1 ring-white/15"
                 />
@@ -56,7 +57,7 @@ export function ChatThread({ messages, busy, onAnswer }: ChatThreadProps) {
           <div className="animate-rise">
             <div className="mb-2 flex items-center gap-2">
               <img
-                src="/pm-avatar.png"
+                src={asset('/pm-avatar.png')}
                 alt="产品专家头像"
                 className="h-6 w-6 shrink-0 rounded-full object-cover ring-1 ring-white/15"
               />

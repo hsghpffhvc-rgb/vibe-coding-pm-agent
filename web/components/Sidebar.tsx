@@ -1,6 +1,7 @@
 'use client';
 
 import { Check, Circle, Plus, Terminal, Wand2 } from 'lucide-react';
+import { asset } from '@/lib/asset';
 import type { Phase } from '@/lib/use-session';
 
 interface SidebarProps {
@@ -32,7 +33,7 @@ export function Sidebar({ phase, engine, brain, filled, total, onReset, onQuickS
     <aside className="hidden w-[248px] shrink-0 flex-col border-r border-white/[0.06] bg-black/40 backdrop-blur-xl lg:flex">
       <div className="flex items-center gap-2.5 px-4 py-4">
         <img
-          src="/pm-avatar.png"
+          src={asset('/pm-avatar.png')}
           alt="产品专家头像"
           className="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-white/15 shadow-glow"
         />

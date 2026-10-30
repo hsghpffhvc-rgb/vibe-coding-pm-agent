@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { seedGreeting } from './engine';
+import { runEngine, seedGreeting } from './engine';
 import type { Answer, Block, Brief, ChatMessage } from './types';
 
 const STORAGE_KEY = 'vibe-pm-session-v1';
@@ -58,7 +58,10 @@ export function useSession() {
         setEngine(data.engine || 'local');
         if (data.brain) setBrain(data.brain);
       })
-      .catch(() => setEngine('local'));
+      .catch(() => {
+        // No API route (static hosting): the browser engine takes over
+        setEngine('local · 浏览器');
+      });
   }, []);
 
   useEffect(() => {
@@ -115,17 +118,39 @@ export function useSession() {
         setEngine(data.engine ?? 'local');
         if (data.brain) setBrain(data.brain);
       } catch (requestError) {
-        console.log('[chat] request failed:', (requestError as Error).message);
-        setError('请求失败，请检查网络后重试。');
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: 'e-' + Date.now(),
-            role: 'agent',
-            blocks: [{ kind: 'note', text: '服务暂时不可用，请重试一次。' }],
-            createdAt: Date.now(),
-          },
-        ]);
+        console.log('[chat] request failed, falling back to local engine:', (requestError as Error).message);
+        // Static hosting has no /api/chat, so run the deterministic engine in the browser
+        try {
+          const local = runEngine({
+            messages: nextMessages,
+            brief: briefRef.current,
+            answers: answers ?? [],
+            intent: intent ?? 'chat',
+          });
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: 'a-' + Date.now(),
+              role: 'agent',
+              blocks: local.blocks,
+              createdAt: Date.now(),
+            },
+          ]);
+          setBrief(local.brief ?? {});
+          setEngine('local');
+        } catch (fallbackError) {
+          console.log('[chat] local fallback failed:', (fallbackError as Error).message);
+          setError('请求失败，请检查网络后重试。');
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: 'e-' + Date.now(),
+              role: 'agent',
+              blocks: [{ kind: 'note', text: '服务暂时不可用，请重试一次。' }],
+              createdAt: Date.now(),
+            },
+          ]);
+        }
       } finally {
         setBusy(false);
       }

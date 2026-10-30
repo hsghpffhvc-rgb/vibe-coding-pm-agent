@@ -1,6 +1,7 @@
 'use client';
 
 import { AlertTriangle, Sparkles } from 'lucide-react';
+import { asset } from '@/lib/asset';
 import { BriefPanel } from '@/components/BriefPanel';
 import { ChatThread } from '@/components/ChatThread';
 import { Composer } from '@/components/Composer';
@@ -30,7 +31,7 @@ export default function Page() {
         <header className="flex items-center justify-between border-b border-white/[0.06] bg-black/20 px-4 py-3 backdrop-blur xl:hidden">
           <div className="flex items-center gap-2">
             <img
-              src="/pm-avatar.png"
+              src={asset('/pm-avatar.png')}
               alt="产品专家头像"
               className="h-7 w-7 shrink-0 rounded-full object-cover ring-1 ring-white/15"
             />
