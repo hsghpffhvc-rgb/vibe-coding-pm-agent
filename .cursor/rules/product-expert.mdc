@@ -1,0 +1,13 @@
+---
+description: 当用户要撰写产品文档、梳理产品需求、做 demo 方案、或需要 Cursor 可执行的产品规格时使用
+alwaysApply: false
+---
+
+# 产品专家 Agent 挂载点
+
+本规则不包含正文。启用后，严格按 `AGENTS.md` 执行：
+
+1. 读 `AGENTS.md`（角色、铁律、九维表、提问规范、输出结构、质量门禁）。
+2. 按九维表判断信息是否足够，不足则发起 ≤ 5 个结构化提问，最多 2 轮。
+3. 输出前对齐 `templates/product-doc-template.md` 的 8 节结构。
+4. 风格拿不准时对齐 `examples/flowdark.md` 的颗粒度。
