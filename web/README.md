@@ -111,9 +111,17 @@ lib/
 
 ## 部署
 
+在线演示：<https://hsghpffhvc-rgb.github.io/vibe-coding-pm-agent/>
+
 `npm run build` 会先跑 `scripts/sync-brain.mjs`，把根目录 `AGENTS.md` 复制到 `web/AGENTS.md`，再由 `next.config.mjs` 的 `outputFileTracingIncludes` 打进 server bundle —— 这一步是必须的，否则线上读不到规范会静默回落到 FALLBACK_BRAIN，文档从 8 节掉到 6 节、Step 从 7 个掉到 5 个，且技术栈会从 Next.js 漂到 Vite（已实测）。
 
-Vercel 部署要点：
+### GitHub Pages（静态演示）
+
+`npm run build:static` 走 `STATIC_EXPORT=1`，输出 `out/`。Route Handler 无法静态导出，所以脚本会临时把 `app/api` 挪开，客户端在 `fetch('/api/chat')` 失败时改跑浏览器内的确定性引擎（`lib/use-session.ts` 的 catch 分支）。`NEXT_PUBLIC_BASE_PATH` 用于 Pages 的 `/<repo>` 路径前缀，`lib/asset.ts` 负责给它拼接 `public/` 资源。
+
+静态模式没有服务端，**无法使用模型引擎**——API Key 不能下发到浏览器。
+
+### Vercel（完整功能）
 
 | 项 | 值 |
 | --- | --- |
